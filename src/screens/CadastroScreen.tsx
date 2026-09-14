@@ -11,16 +11,14 @@ export function CadastroScreen() {
 
   const salvarIncidente = async () => {
     if (!setor || !descricao) return Alert.alert("Erro", "Preencha tudo.");
-
+    
     try {
       setLoading(true);
       await alertaService.criar({
-        categoria: "Falta de EPI",
+        tipoRisco: "Falta de EPI",
         descricao,
-        gravidade: "critico",
-        setorCamera: setor,
-        dataHora: new Date().toLocaleString('pt-BR'),
-        resolvido: false
+        nivelPerigo: "critico",
+        localizacao: setor,
       });
       navigation.goBack();
     } catch (err) {

@@ -13,5 +13,8 @@ export const alertaService = {
   criar: async (alerta: Omit<AlertaSeguranca, 'id'>): Promise<AlertaSeguranca> => {
     const response = await api.post('/alertas', alerta);
     return response.data;
+  },
+  deletar: async (id: number): Promise<void> => {
+    await api.delete(`/alertas/${id}`);
   }
 };

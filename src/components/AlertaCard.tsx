@@ -10,43 +10,27 @@ type Props = {
 };
 
 export function AlertaCard({ alerta, onPress }: Props) {
-  
-  const getCorGravidade = (gravidade: string) => {
-    switch (gravidade) {
-      case 'critico': return '#FF3B30'; // Vermelho (Urgência máxima)
-      case 'alerta': return '#FF9500';  // Laranja/Amarelo (Atenção)
-      case 'observacao': return '#34C759'; // Verde (Monitoramento leve)
-      default: return '#8E8E93'; // Cinza padrão
-    }
-  };
-
-  const corDestaque = getCorGravidade(alerta.gravidade);
+  const perigoStr = alerta.nivelPerigo ? alerta.nivelPerigo.toLowerCase() : '';
+  const corDestaque = perigoStr === 'critico' ? '#FF3B30' : perigoStr === 'alerta' ? '#FF9500' : '#34C759';
 
   return (
-    <TouchableOpacity 
-      style={[styles.card, { borderLeftColor: corDestaque }]} 
-      onPress={onPress}
-      activeOpacity={0.7}
-    >
+    <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.header}>
-        <Text style={styles.categoria}>{alerta.categoria}</Text>
-        {}
-        {alerta.resolvido ? (
-          <Ionicons name="checkmark-circle" size={20} color="#34C759" />
-        ) : (
-          <Ionicons name="warning" size={20} color={corDestaque} />
-        )}
+        <Text style={styles.categoria}>{alerta.tipoRisco || 'Alerta Industrial'}</Text>
+        <Ionicons name="warning" size={20} color={corDestaque} />
       </View>
-
-      <Text style={styles.local}>
-        <Ionicons name="videocam-outline" size={14} color="#666" /> {alerta.setorCamera}
+      
+      <Text style={styles.descricao} numberOfLines={2}>
+        {alerta.descricao || 'Sem descrição.'}
       </Text>
 
       <View style={styles.footer}>
         <Text style={styles.statusTexto}>
-          Status: <Text style={{ color: corDestaque, fontWeight: 'bold' }}>{alerta.gravidade.toUpperCase()}</Text>
+          Local: <Text style={{ fontWeight: 'bold' }}>{alerta.localizacao || 'Geral'}</Text>
         </Text>
-        <Text style={styles.dataHora}>{alerta.dataHora}</Text>
+        <Text style={[styles.statusTexto, { color: corDestaque, fontWeight: 'bold' }]}>
+          {alerta.nivelPerigo ? alerta.nivelPerigo.toUpperCase() : 'REGULAR'}
+        </Text>
       </View>
     </TouchableOpacity>
   );
