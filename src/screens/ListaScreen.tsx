@@ -1,36 +1,63 @@
-
-import React from 'react';
-import { StyleSheet, View, FlatList, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { StyleSheet, View, FlatList, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useFocusEffect } from '@react-navigation/native';
 import { RootStackParamList } from '../../App';
 import { AlertaSeguranca } from '../types/Registro';
 import { AlertaCard } from '../components/AlertaCard';
+import { alertaService } from '../services/alertaService';
 import { Ionicons } from '@expo/vector-icons';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Lista'> & {
-  alertas: AlertaSeguranca[];
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'Lista'>;
 
-export function ListaScreen({ navigation, alertas }: Props) {
+export function ListaScreen({ navigation }: Props) {
+  const [alertas, setAlertas] = useState<AlertaSeguranca[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      carregarDados();
+    }, [])
+  );
+
+  const carregarDados = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+      const dados = await alertaService.listar();
+      setAlertas(dados);
+    } catch (err) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <View style={styles.center}><ActivityIndicator size="large" color="#FF9500" /></View>;
+
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Ionicons name="cloud-offline" size={64} color="#FF3B30" />
+        <Text style={styles.errorText}>Backend indisponível.</Text>
+        <TouchableOpacity style={styles.retryBtn} onPress={carregarDados}>
+          <Text style={styles.retryText}>Tentar Novamente</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={alertas}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <AlertaCard
-            alerta={item}
-            onPress={() => navigation.navigate('Detalhe', { alerta: item })}
-          />
+          <AlertaCard alerta={item} onPress={() => navigation.navigate('Detalhe', { id: item.id })} />
         )}
-        contentContainerStyle={styles.listContent}
       />
-
-      {/* Botão Flutuante para Relato Manual */}
-      <TouchableOpacity 
-        style={styles.fab}
-        onPress={() => navigation.navigate('Cadastro', { setAlertas: navigation.getParent() ? () => {} : undefined as any })}
-      >
+      <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('Cadastro')}>
         <Ionicons name="add" size={24} color="#FFF" />
         <Text style={styles.fabText}>Relatar Risco</Text>
       </TouchableOpacity>
@@ -40,22 +67,9 @@ export function ListaScreen({ navigation, alertas }: Props) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F2F2F7' },
-  listContent: { paddingBottom: 100 },
-  fab: {
-    position: 'absolute',
-    bottom: 24,
-    right: 24,
-    backgroundColor: '#FF9500',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 30,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 4 },
-  },
-  fabText: { color: '#FFF', fontWeight: 'bold', marginLeft: 8 }
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { fontSize: 18, color: '#FF3B30', marginTop: 10 },
+  retryBtn: { marginTop: 20, padding: 12, backgroundColor: '#FF9500', borderRadius: 8 },
+  retryText: { color: '#FFF', fontWeight: 'bold' },
+  fab: { position: 'absolute', bottom: 24, right: 24, backgroundColor: '#FF9500', flexDirection: 'row', alignItems: 'center', padding: 16, borderRadius: 30 }
 });
