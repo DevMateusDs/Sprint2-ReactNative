@@ -3,7 +3,7 @@ export type CategoriaRisco = "Falta de EPI" | "Postura Incorreta" | "Invasão de
 export type NivelGravidade = "observacao" | "alerta" | "critico";
 
 export type AlertaSeguranca = {
-  id: string;
+  id: number;
   categoria: CategoriaRisco;
   descricao: string;
   equipamentoFaltante?: string;
