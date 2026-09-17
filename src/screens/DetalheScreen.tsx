@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, TouchableOpacity, Alert, Platform } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { AlertaSeguranca } from '../types/Registro';
@@ -29,6 +29,18 @@ export function DetalheScreen({ route, navigation }: Props) {
   }, [id]);
 
   const confirmarExclusao = () => {
+    console.log("Botão excluir acionado para o ID:", id);
+
+    // Se estiver rodando no navegador web, usa o confirm nativo do browser
+    if (Platform.OS === 'web') {
+      const resp = window.confirm("Tem certeza que deseja remover este alerta do sistema?");
+      if (resp) {
+        excluirAlerta();
+      }
+      return;
+    }
+
+    // Padrão para aplicativo mobile (Android/iOS)
     Alert.alert(
       "Excluir Registro",
       "Tem certeza que deseja remover este alerta do sistema?",
@@ -89,6 +101,16 @@ export function DetalheScreen({ route, navigation }: Props) {
         <Text style={styles.descricaoBox}>{alerta.descricao}</Text>
       </View>
 
+      {/* Botão de Editar */}
+      <TouchableOpacity 
+        style={styles.editButton} 
+        onPress={() => navigation.navigate('Cadastro', { id: alerta.id })}
+      >
+        <Ionicons name="create-outline" size={20} color="#FFF" style={{ marginRight: 8 }} />
+        <Text style={styles.editButtonText}>Editar Registro</Text>
+      </TouchableOpacity>
+
+      {/* Botão de Excluir */}
       <TouchableOpacity 
         style={styles.deleteButton} 
         onPress={confirmarExclusao}
@@ -120,6 +142,8 @@ const styles = StyleSheet.create({
   label: { fontSize: 15, fontWeight: '600', color: '#3A3A3C', marginLeft: 8, marginRight: 6 },
   valor: { fontSize: 15, color: '#1C1C1E', flex: 1 },
   descricaoBox: { fontSize: 15, color: '#3A3A3C', backgroundColor: '#F9F9FB', padding: 12, borderRadius: 8, marginTop: 4, lineHeight: 22 },
+  editButton: { backgroundColor: '#007AFF', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 16, borderRadius: 12, marginBottom: 12, shadowColor: '#007AFF', shadowOpacity: 0.3, shadowRadius: 4, elevation: 2 },
+  editButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' },
   deleteButton: { backgroundColor: '#FF3B30', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 16, borderRadius: 12, shadowColor: '#FF3B30', shadowOpacity: 0.3, shadowRadius: 4, elevation: 2 },
   deleteButtonText: { color: '#FFF', fontSize: 16, fontWeight: 'bold' }
 });

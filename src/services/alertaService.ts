@@ -14,6 +14,10 @@ export const alertaService = {
     const response = await api.post('/alertas', alerta);
     return response.data;
   },
+  atualizar: async (id: number, alerta: Omit<AlertaSeguranca, 'id'>): Promise<AlertaSeguranca> => {
+    const response = await api.put(`/alertas/${id}`, alerta);
+    return response.data;
+  },
   deletar: async (id: number): Promise<void> => {
     await api.delete(`/alertas/${id}`);
   }
