@@ -54,7 +54,7 @@ Abra o terminal na pasta do projeto frontend e execute os comandos:
 ```bash
 npm install
 npx expo start -c
-
+```
 Pressione `w` para abrir no navegador, `a` para emulador Android, ou escaneie o QR Code com o aplicativo *Expo Go* no celular.
 
 ---
