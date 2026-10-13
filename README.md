@@ -1,56 +1,88 @@
-# 🛡️ Sprint 3 - Frontend Mobile: Monitoramento Preventivo de Riscos Industriais (Metaindústria)
+# 🛡️ Sprint 4 (Entrega Final) - Metaindústria: Monitoramento Preventivo de Riscos Industriais
 
-Este aplicativo é o frontend mobile, integrando o desafio de criar soluções baseadas em **Visão Computacional e Indústria 4.0**. O objetivo do sistema é monitorar ambientes industriais em tempo real para identificar riscos ergonômicos e ausência de Equipamentos de Proteção Individual (EPIs).
-
-Nesta Sprint 3, o aplicativo abandonou o uso de dados locais (mocks) e foi totalmente integrado ao backend em Spring Boot.
+Sistema completo desenvolvido para o desafio de Indústria 4.0, integrando um aplicativo mobile em React Native (Expo) com uma API REST em Spring Boot e banco de dados H2. O objetivo é monitorar em tempo real alertas de segurança e ausência de EPIs no ambiente fabril.
 
 ---
 
-## 🚀 Tecnologias e Dependências Utilizadas
-* **React Native + Expo** (Template Blank com TypeScript)
-* **Axios** para consumo da API REST (`npx expo install axios`)
-* **React Navigation (Native Stack)** para o fluxo de navegação
-* **Expo Vector Icons (Ionicons)** para elementos visuais
+## 👥 Integrantes da Equipe & RMs (FIAP)
+* **Mateus de Souza Santos** - RM559118
+* **Arthur Bergamaço Alves** - RM556207
+* **Breno Barbosa Pereira** - RM555348
+* **Leonardo Medeiros da Silva** - RM559220
+* **Renan Melo Rosemberg** - RM558535
+* **Pietro Rodriguez Medeiros** - RM555899
 
 ---
 
-## 🔌 Integração e Endpoints (Sprint 3)
-Toda a comunicação REST está abstraída na pasta `src/services/`, garantindo que a interface gráfica não lide com as requisições diretamente.
-
-**Endpoints Consumidos da API Spring Boot:**
-* `GET /alertas` - Lista todos os riscos ativos.
-* `GET /alertas/{id}` - Busca os detalhes de uma ocorrência específica.
-* `POST /alertas` - Registra um novo alerta no banco de dados H2.
-* `PUT /alertas/{id}` - Atualiza um registro existente.
-* `DELETE /alertas/{id}` - Remove um alerta do sistema.
-
-**Resiliência (Backend Offline):**
-Se a API estiver desligada, a `ListaScreen` captura a falha e renderiza um estado de erro visual informando que o backend está indisponível, acompanhado de blocos `try/catch/finally` para evitar crashes abruptos.
+## 🔗 Repositórios do Projeto
+* **Repositório Backend (Spring Boot):** [https://github.com/DevMateusDs/Sprint-Java---FIAP](https://github.com/DevMateusDs/Sprint-Java---FIAP)
+* **Repositório Frontend (React Native):** [https://github.com/DevMateusDs/Sprint2-ReactNative](https://github.com/DevMateusDs/Sprint2-ReactNative)
 
 ---
 
-## 📂 Estrutura da Pasta de Serviços (`src/services/`)
-* **`api.ts`** - Configuração global do Axios (baseURL, timeout e cabeçalhos JSON).
-* **`alertaService.ts`** - Camada isolada contendo as funções de comunicação (`listar`, `buscarPorId`, `criar`, `atualizar` e `deletar`).
+## 🎥 Vídeo de Demonstração (YouTube)
+* **Link da Apresentação:** [INSIRA O LINK DO VÍDEO DO YOUTUBE AQUI - Não Listado, máx. 5 min]
 
 ---
 
-## 🔧 Como Executar e Testar a Integração
+## ⚙️ Pré-requisitos
+Antes de executar o projeto, certifique-se de ter instalado em sua máquina:
+* **Java Development Kit (JDK 17)** ou superior
+* **Maven** (para gerenciar as dependências do Spring Boot)
+* **Node.js** e npm
+* **Expo CLI** (`npm install -g expo-cli`)
 
-### 1. Inicialização do Backend (Spring Boot)
-Para o aplicativo funcionar, o backend da equipe deve estar rodando localmente na máquina:
-1. Abra a API Java na sua IDE.
-2. Certifique-se de que os Controllers possuem a anotação `@CrossOrigin(origins = "*")`.
-3. Inicie o servidor, que responderá na porta `8080` utilizando o banco H2 em arquivo.
+---
 
-### 2. Configuração da BASE_URL no App
-Abra o arquivo `src/services/api.ts` e altere a URL base conforme o seu ambiente de teste:
+## 🚀 Como Executar o Projeto
+
+### 1. Inicializando o Backend (Spring Boot)
+1. Clone o repositório do backend e abra o projeto em sua IDE (IntelliJ, Eclipse, VS Code).
+2. Certifique-se de que o controller possui a anotação `@CrossOrigin(origins = "*")`.
+3. Execute a classe principal da aplicação Spring Boot.
+4. O servidor iniciará na porta **`8080`** utilizando o banco H2 em arquivo (`/data/metaindustria.mv.db`).
+5. Você pode conferir os dados em JSON acessando `http://localhost:8080/alertas` no navegador.
+
+### 2. Configurando a `BASE_URL` no Frontend
+No projeto mobile, abra o arquivo **`src/services/api.ts`** e configure a URL base conforme o seu ambiente de testes:
 * **Navegador Web / iOS:** `http://localhost:8080`
-* **Emulador Android no PC:** `http://10.0.2.2:8080`
-* **Celular Físico (Expo Go):** O IP local da sua máquina (ex: `http://192.168.X.X:8080`)
+* **Emulador Android:** `http://10.0.2.2:8080`
+* **Celular Físico (Expo Go):** O endereço IP local da sua máquina na rede (ex: `http://192.168.1.15:8080`)
 
-### 3. Rodando o Frontend
-Com o backend ativo, abra o terminal na pasta do projeto mobile e execute:
+### 3. Executando o Frontend (React Native / Expo)
+Abra o terminal na pasta do projeto frontend e execute os comandos:
 ```bash
 npm install
 npx expo start -c
+
+Pressione `w` para abrir no navegador, `a` para emulador Android, ou escaneie o QR Code com o aplicativo *Expo Go* no celular.
+
+---
+
+## 🔌 Endpoints da API REST Utilizados pelo App
+* `GET /alertas` - Lista todos os registros cadastrados.
+* `GET /alertas/{id}` - Busca os detalhes de um registro específico.
+* `POST /alertas` - Cria um novo alerta de segurança.
+* `PUT /alertas/{id}` - Atualiza os dados de um alerta existente.
+* `DELETE /alertas/{id}` - Remove o registro do sistema.
+
+---
+
+## 🔄 Fluxo de Dados (Arquitetura)
+O sistema desacopla a interface da infraestrutura de rede:
+$$\text{Tela (React Native)} \longrightarrow \text{Serviço (\texttt{alertaService.ts})} \longrightarrow \text{Cliente HTTP (\texttt{api.ts})} \longrightarrow \text{API REST (Spring Boot :8080)}$$
+
+1. A tela aciona o método no serviço (ex: `alertaService.listar()`).
+2. O serviço utiliza o Axios para disparar a requisição HTTP para a rota correspondente.
+3. O Spring Boot processa a requisição, interage com o banco H2 via Spring Data JPA e devolve um JSON.
+4. A tela recebe os dados, controla os estados de carregamento (`ActivityIndicator`) e renderiza os componentes.
+
+---
+
+## 🧪 Como Testar a Integração e a Resiliência
+
+1. **Cadastrar e Conferir:** Abra o aplicativo, clique em cadastrar um novo alerta (preenchendo tipo, local, descrição e nível de perigo). Volte para a lista e veja o item renderizado. Acesse o endpoint no navegador (`http://localhost:8080/alertas`) para comprovar que o dado foi gravado no banco do backend.
+2. **Testar com o Backend Parado (Resiliência):** 
+   * Encerre a execução da aplicação Spring Boot na sua IDE.
+   * No aplicativo mobile, recarregue a tela ou tente atualizar a listagem.
+   * O app lidará com a exceção através de blocos `try/catch`, exibindo o erro de indisponibilidade de forma amigável e **sem utilizar dados mockados (falsos)**.
