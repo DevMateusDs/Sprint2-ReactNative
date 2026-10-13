@@ -21,7 +21,7 @@ Sistema completo desenvolvido para o desafio de Indústria 4.0, integrando um ap
 ---
 
 ## 🎥 Vídeo de Demonstração (YouTube)
-* **Link da Apresentação:** [INSIRA O LINK DO VÍDEO DO YOUTUBE AQUI - Não Listado, máx. 5 min]
+* **Link da Apresentação:** 
 
 ---
 
